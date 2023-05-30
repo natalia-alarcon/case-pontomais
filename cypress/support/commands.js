@@ -1,25 +1,30 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('login', (username, password) => {
+    cy.get('[data-test="username"]').type(username);
+    cy.get('[data-test="password"]').type(password);
+    cy.goToPage('[data-test="login-button"]', 'inventory');
+});
+
+Cypress.Commands.add('addToCart', (product) => {
+    cy.get(`[data-test="add-to-cart-${product}"]`).click();
+});
+
+Cypress.Commands.add('removeItem', (product) => {
+    cy.get(`[data-test="remove-${product}"]`).click();
+});
+
+Cypress.Commands.add('goToPage', (attribute, page) => {
+    cy.get(attribute)
+      .click()
+      .url()
+      .should('contain', `/${page}.html`);
+});
+
+Cypress.Commands.add('checkElementVisibility', (element) => {
+    cy.contains(element).should('be.visible');
+});
+
+Cypress.Commands.add('fillCheckoutForm', (firstName, lastName, postalCode) => {
+    cy.get('[data-test="firstName"]').type(firstName);
+    cy.get('[data-test="lastName"]').type(lastName);
+    cy.get('[data-test="postalCode"]').type(postalCode);
+})
